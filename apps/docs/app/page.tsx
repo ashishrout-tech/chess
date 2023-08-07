@@ -1,4 +1,6 @@
-import { Button, Header } from "ui";
+import { Button } from "ui/components/Button";
+import { Header } from 'ui/components/Header';
+
 
 export default function Page() {
   return (

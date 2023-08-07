@@ -1,3 +1,5 @@
+import "tailwind-class";
+
 export default function RootLayout({
   children,
 }: {
