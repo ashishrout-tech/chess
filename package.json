@@ -1,5 +1,8 @@
 {
-  "private": true,
+  "name": "monorepo",
+  "version": "1.0.0",
+  "description": "A monorepo with two next.js apps and an express api",
+  "license": "MIT",
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev",
@@ -14,7 +17,6 @@
     "prettier": "^3.0.1",
     "turbo": "latest"
   },
-  "name": "turborepo2",
   "packageManager": "npm@9.7.2",
   "workspaces": [
     "apps/*",
