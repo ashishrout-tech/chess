@@ -1,8 +1,14 @@
 {
-  "name": "monorepo",
-  "version": "1.0.0",
+  "name": "overpowered-monorepo",
+  "version": "1.1.0",
   "description": "A monorepo with two next.js apps and an express api",
   "license": "MIT",
+  "keywords": ["monorepo", "next.js", "express.js", "tailwind", "shadcn"],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ashishrout-tech/monorepo.git"
+  },
+  "author": "ashishrout-tech",
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev",
