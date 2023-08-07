@@ -2,9 +2,8 @@
 
 ### This monorepo houses two Next.js apps and an Express.js api, optimizing development with integrated tailwind-features and the shad-cn component library for the Next.js apps.
 
-## Cloning
 
-Clone the  reop. Then, run
+Clone the repository. Then, run
 
 ```bash
 npm install
