@@ -1,9 +1,14 @@
 {
   "name": "overpowered-monorepo",
-  "version": "1.2.0",
   "description": "A monorepo with two next.js apps and an express api",
   "license": "MIT",
-  "keywords": ["monorepo", "next.js", "express.js", "tailwind", "shadcn"],
+  "keywords": [
+    "monorepo",
+    "next.js",
+    "express.js",
+    "tailwind",
+    "shadcn"
+  ],
   "files": [
     "apps",
     "packages",
