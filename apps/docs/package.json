@@ -1,6 +1,6 @@
 {
   "name": "@overpowered-monorepo/docs",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "files": [
     "app",
     ".next",
@@ -19,11 +19,11 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@overpowered-monorepo/tailwind-class": "^2.0.0",
+    "@overpowered-monorepo/ui": "^2.0.0",
     "next": "^13.4.13",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "@overpowered-monorepo/ui": "*",
-    "@overpowered-monorepo/tailwind-class": "*"
+    "react-dom": "^18.2.0"
   },
   "devDependencies": {
     "@types/node": "^20.4.8",
