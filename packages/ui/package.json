@@ -2,6 +2,7 @@
   "name": "@overpowered-monorepo/ui",
   "version": "2.0.0",
   "license": "MIT",
+  "private": "false",
   "files": [
     "components",
     "lib",
@@ -22,5 +23,6 @@
     "react": "^18.2.0",
     "tsconfig": "*",
     "typescript": "^5.1.6"
-  }
+  },
+  "gitHead": "a2f8b69a6adca17a884943275fe71ed3b9f60888"
 }

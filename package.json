@@ -2,6 +2,7 @@
   "name": "overpowered-monorepo",
   "description": "A monorepo with two next.js apps and an express api",
   "license": "MIT",
+  "private": "false",
   "keywords": [
     "monorepo",
     "next.js",

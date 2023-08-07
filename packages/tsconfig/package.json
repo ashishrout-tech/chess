@@ -2,6 +2,7 @@
   "name": "@overpowered-monorepo/tsconfig",
   "version": "2.0.0",
   "license": "MIT",
+  "private": "false",
   "files": [
     "base.json",
     "nextjs.json",
@@ -10,5 +11,6 @@
   ],
   "publishConfig": {
     "access": "public"
-  }
+  },
+  "gitHead": "a2f8b69a6adca17a884943275fe71ed3b9f60888"
 }

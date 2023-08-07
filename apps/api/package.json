@@ -3,6 +3,7 @@
   "version": "2.0.0",
   "description": "",
   "main": "index.js",
+  "private": "false",
   "files": [
     "src",
     ".gitignore",
@@ -29,5 +30,6 @@
     "express": "^4.18.2",
     "inquirer": "^9.2.10",
     "minimatch": "^9.0.3"
-  }
+  },
+  "gitHead": "a2f8b69a6adca17a884943275fe71ed3b9f60888"
 }

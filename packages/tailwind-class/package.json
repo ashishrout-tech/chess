@@ -3,6 +3,7 @@
   "version": "2.0.0",
   "description": "",
   "main": "./dist/styles.css",
+  "private": "false",
   "files": [
     "dist",
     ".gitignore",
@@ -31,5 +32,6 @@
     "clsx": "^2.0.0",
     "tailwind-merge": "^1.14.0",
     "tailwindcss-animate": "^1.0.6"
-  }
+  },
+  "gitHead": "a2f8b69a6adca17a884943275fe71ed3b9f60888"
 }

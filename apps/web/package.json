@@ -1,6 +1,7 @@
 {
   "name": "@overpowered-monorepo/web",
   "version": "2.0.0",
+  "private": "false",
   "files": [
     "app",
     ".next",
@@ -33,5 +34,6 @@
     "eslint-config-custom": "*",
     "tsconfig": "*",
     "typescript": "^5.1.6"
-  }
+  },
+  "gitHead": "a2f8b69a6adca17a884943275fe71ed3b9f60888"
 }
