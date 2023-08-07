@@ -1,4 +1,4 @@
-import "tailwind-class"
+import "@overpowered-monorepo/tailwind-class"
 
 export default function RootLayout({
   children,

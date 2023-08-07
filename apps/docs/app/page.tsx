@@ -1,5 +1,5 @@
-import { Button } from "ui/components/Button";
-import { Header } from 'ui/components/Header';
+import { Button } from "@overpowered-monorepo/ui/components/Button";
+import { Header } from '@overpowered-monorepo/ui/components/Header';
 
 
 export default function Page() {

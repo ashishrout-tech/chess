@@ -1,7 +1,11 @@
 {
-  "name": "eslint-config-custom",
+  "name": "@overpowered-monorepo/eslint-config-custom",
   "version": "0.0.0",
   "main": "index.js",
+  "files": [
+    "index.js",
+    "package.json"
+  ],
   "license": "MIT",
   "dependencies": {
     "eslint-config-next": "^13.4.1",

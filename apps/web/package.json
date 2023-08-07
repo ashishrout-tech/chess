@@ -1,6 +1,17 @@
 {
-  "name": "web",
+  "name": "@overpowered-monorepo/web",
   "version": "1.0.0",
+  "files": [
+    "app",
+    ".next",
+    ".eslintrc.js",
+    "next-env.d.ts",
+    "next.config.js",
+    ".gitignore",
+    "package.json",
+    "README.md",
+    "tsconfig.json"
+  ],
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -12,8 +23,8 @@
     "next": "^13.4.13",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "tailwind-class": "*",
-    "ui": "*"
+    "@overpowered-monorepo/tailwind-class": "*",
+    "@overpowered-monorepo/ui": "*"
   },
   "devDependencies": {
     "@types/node": "^20.4.8",

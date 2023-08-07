@@ -8,7 +8,7 @@
     ],
     "paths": {
       "@/*": [
-        "./../../node_modules/ui/*"
+        "./../../node_modules/@overpowered-monorepo/ui/*"
       ]
     }
   },

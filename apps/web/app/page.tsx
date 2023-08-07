@@ -1,5 +1,5 @@
-import { Header } from "ui/components/Header"
-import { Avatar, AvatarFallback, AvatarImage } from "ui/components/ui/avatar"
+import { Header } from "@overpowered-monorepo/ui/components/Header"
+import { Avatar, AvatarFallback, AvatarImage } from "@overpowered-monorepo/ui/components/ui/avatar"
 
 export default function Page() {
   return (

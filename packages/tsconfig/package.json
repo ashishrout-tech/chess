@@ -1,7 +1,13 @@
 {
-  "name": "tsconfig",
+  "name": "@overpowered-monorepo/tsconfig",
   "version": "0.0.0",
   "license": "MIT",
+  "files": [
+    "base.json",
+    "nextjs.json",
+    "package.json",
+    "react-library.json"
+  ],
   "publishConfig": {
     "access": "public"
   }

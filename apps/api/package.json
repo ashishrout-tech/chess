@@ -1,8 +1,15 @@
 {
-  "name": "api",
+  "name": "@overpowered-monorepo/api",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "files": [
+    "src",
+    ".gitignore",
+    "package.json",
+    "README.md",
+    "tsconfig.json"
+  ],
   "scripts": {
     "build": "tsc",
     "dev": "nodemon ./src/index.ts"

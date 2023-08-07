@@ -1,8 +1,16 @@
 {
-  "name": "tailwind-class",
+  "name": "@overpowered-monorepo/tailwind-class",
   "version": "1.0.0",
   "description": "",
   "main": "./dist/styles.css",
+  "files": [
+    "dist",
+    ".gitignore",
+    "global.css",
+    "package.json",
+    "postcss.config.js",
+    "tailwind.config.js"
+  ],
   "scripts": {
     "dev": "postcss global.css -o dist/styles.css --watch"
   },
