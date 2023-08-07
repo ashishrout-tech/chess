@@ -2,6 +2,14 @@
 
 ### This monorepo houses two Next.js apps and an Express.js api, optimizing development with integrated tailwind-features and the shad-cn component library for the Next.js apps.
 
+## Installation
+
+You can install the `overpowered-monorepo` package from GitHub using npm.
+
+```bash
+npm install overpowered-monorepo
+```
+
 ## What's inside?
 
 This repo includes the following packages/apps:
@@ -31,7 +39,7 @@ This monorepo has some additional tools already setup for you:
 To build all apps and packages, run the following command:
 
 ```bash
-npm build
+npm run build
 ```
 
 ### Develop
@@ -39,5 +47,5 @@ npm build
 To develop all apps and packages, run the following command:
 
 ```bash
-npm dev
+npm run dev
 ```
