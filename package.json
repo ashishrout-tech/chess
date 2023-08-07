@@ -39,7 +39,7 @@
   "devDependencies": {
     "@turbo/gen": "^1.10.12",
     "eslint": "^8.46.0",
-    "eslint-config-custom": "*",
+    "@overpowered-monorepo/eslint-config-custom": "*",
     "prettier": "^3.0.1",
     "turbo": "latest"
   },
