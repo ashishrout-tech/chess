@@ -3,7 +3,6 @@
   "version": "2.1.0",
   "description": "",
   "main": "index.js",
-  "private": "false",
   "files": [
     "src",
     ".gitignore",

@@ -3,7 +3,6 @@
   "version": "2.1.0",
   "description": "",
   "main": "./dist/styles.css",
-  "private": "false",
   "files": [
     "dist",
     ".gitignore",

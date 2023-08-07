@@ -1,7 +1,6 @@
 {
   "name": "@overpowered-monorepo/docs",
   "version": "2.1.0",
-  "private": "false",
   "files": [
     "app",
     ".next",

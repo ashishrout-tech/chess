@@ -2,7 +2,6 @@
   "name": "@overpowered-monorepo/ui",
   "version": "2.1.0",
   "license": "MIT",
-  "private": "false",
   "files": [
     "components",
     "lib",
