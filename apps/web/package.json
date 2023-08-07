@@ -1,6 +1,6 @@
 {
   "name": "@overpowered-monorepo/web",
-  "version": "2.1.0",
+  "version": "1.3.0",
   "files": [
     "app",
     ".next",
@@ -19,8 +19,8 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@overpowered-monorepo/tailwind-class": "^2.1.0",
-    "@overpowered-monorepo/ui": "^2.1.0",
+    "@overpowered-monorepo/tailwind-class": "^1.3.0",
+    "@overpowered-monorepo/ui": "^1.3.0",
     "@radix-ui/react-hover-card": "^1.0.6",
     "next": "^13.4.13",
     "react": "^18.2.0",
