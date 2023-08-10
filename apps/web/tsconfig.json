@@ -9,6 +9,9 @@
     "paths": {
       "@/*": [
         "./../../node_modules/@overpowered-monorepo/ui/*"
+      ],
+      "@public/*":[
+        "./public/*"
       ]
     }
   },
