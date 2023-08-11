@@ -6,14 +6,17 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { cn } from "@overpowered-monorepo/ui/lib/utils";
 import { IBoard } from "../../../interface";
-import { CHECK } from "../../../utils/check-game";
+import { CHECK, cell } from "../../../utils/check-game";
+import { changeBoard } from "../../../utils/change-board";
 
 
 const Game = () => {
     const [arr, setArr] = useState<IBoard[]>([]);
+    const [fakeArr, setFakeArr] = useState<IBoard[]>([]);
     const [lastEle, setLastEle] = useState<IBoard>();
     const [socket, SetSocket] = useState<Socket | null>(null);
-    const[roomValue, setRoomValue] = useState<string | null>(null);
+    const [roomValue, setRoomValue] = useState<string | null>(null);
+    const [cnt, setCnt] = useState<number>(1);
 
     useEffect(() => {
         const newSocket = io('ws://localhost:5173');
@@ -21,9 +24,10 @@ const Game = () => {
         newSocket.on("connect", () => {
             const newRoomValue = prompt("Enter the room you want to join");
 
-            newSocket.emit("join-room", newRoomValue, (message: string) => {
-                console.log(message);
+            newSocket.emit("join-room", newRoomValue, (message: string, cnt: number) => {
+                console.log(message, cnt);
                 setRoomValue(newRoomValue);
+                setCnt(cnt);
             })
 
         })
@@ -38,6 +42,7 @@ const Game = () => {
             try {
                 const response = await axios.get(`${process.env.NEXT_PUBLIC_URL}/api/board`);
                 setArr(response.data.message);
+                setFakeArr(response.data.message);
             } catch (error) {
                 console.log(error);
             }
@@ -50,6 +55,7 @@ const Game = () => {
         socket.on("receive-newBoard", (arr: string) => {
             const newArr = JSON.parse(arr);
             // console.dir(newArr);
+            // changeBoard(newArr);
             setArr(newArr);
         })
     }
@@ -63,13 +69,17 @@ const Game = () => {
     }
     function DragEnd(startEle: IBoard) {
 
+        
         if (startEle.color === lastEle.color) {
             return;
         }
-
-        const isValid = CHECK(startEle, lastEle, arr);
+        
+        const isValid = CHECK(startEle, lastEle, arr, cnt);
         if (!isValid) return;
-
+        
+        console.log(startEle.pos);
+        console.log(lastEle.pos);
+        console.log(arr);
         
         const newArr = arr.map((ele) => {
             if (ele.pos === startEle.pos) {
@@ -89,10 +99,19 @@ const Game = () => {
             }
             return { ...ele };
         })
+
+        let newFakeArr = [];
+        for (let r = 1; r <= 8; r++) {
+            for (let c = 1; c <= 8; c++) {
+                let clr = newArr[cell(9 - r, c)].color;
+                newFakeArr.push({ ...newArr[cell(9 - r, c)], pos: `${r}-${c}`});
+            }
+        }
+        setFakeArr(newFakeArr);
         
         // console.dir(newArr);
         if (socket) {
-            socket.emit('piece-moved', newArr, roomValue);
+            socket.emit('piece-moved', newFakeArr, roomValue);
         }
         setArr(newArr);
     }

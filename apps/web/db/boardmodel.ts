@@ -19,6 +19,7 @@ const boardSchema = new mongoose.Schema({
     },
     color: String,
     type: String,
+    id: String,
 })
 
 let boardmodel: Model<BoardDocument>;

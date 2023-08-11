@@ -2,7 +2,7 @@
 
 import { IBoard } from "../interface";
 
-export const CHECK = (sP: IBoard, eP: IBoard, ar: IBoard[]) => {
+export const CHECK = (sP: IBoard, eP: IBoard, ar: IBoard[], cnt: number) => {
 
     let startPiece = { ...sP };
     let endPiece = { ...eP };
@@ -14,7 +14,7 @@ export const CHECK = (sP: IBoard, eP: IBoard, ar: IBoard[]) => {
     // console.dir(endPiece);
     // console.dir(arr);
 
-    if (sP.color === 'black') {
+    if ((sP.color === 'black' && cnt === 1) || (sP.color === 'white' && cnt === 2)) {
         arr = []
         for (let r = 1; r <= 8; r++) {
             for (let c = 1; c <= 8; c++) {
@@ -223,7 +223,7 @@ function present(r: number, c: number, arr: IBoard[]) {
     return false;
 }
 
-function cell(r: number, c: number): number {
+export function cell(r: number, c: number): number {
     return ((r - 1) * 8 + c - 1);
 }
 

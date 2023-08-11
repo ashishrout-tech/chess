@@ -25,6 +25,8 @@ interface IBoard {
 }
 
 
+let cnt = 1;
+let storedRoom = "";
 io.on('connection', (socket: Socket) => {
     console.log("A user Connected", socket.id);
 
@@ -34,9 +36,18 @@ io.on('connection', (socket: Socket) => {
     })
 
 
-    socket.on('join-room', (room: string, cb: (message: String) => void) => {
+    socket.on('join-room', (room: string, cb: (message: string, cnt: number) => void) => {
         socket.join(room);
-        cb(`successfully joined the room: ${room}`);
+        if(room == storedRoom){
+            cb("Another one joined", cnt);
+            cnt++;
+        }
+        else{
+            cnt = 1;
+            cb("first person joined", cnt);
+            storedRoom = room;
+            cnt++;
+        }
         console.log(`joined-room ${room}`, socket.id);
     })
 })

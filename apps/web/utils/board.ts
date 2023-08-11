@@ -53,7 +53,7 @@ export const boardfill = () => {
                 src: ele,
                 pos: `${r}-${c}`,
                 type: type,
-                color: color
+                color: color,
             })
         }
     })
