@@ -4,4 +4,7 @@ module.exports = {
   experimental: {
     serverActions: true,
   },
+  images: {
+    unoptimized: true,
+  },
 };
