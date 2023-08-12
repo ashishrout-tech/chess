@@ -1,13 +1,16 @@
 "use client"
 
 import { Socket, io } from "socket.io-client";
-import Image from "next/image";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { cn } from "@overpowered-monorepo/ui/lib/utils";
 import { IBoard } from "../../../interface";
-import { CHECK, beforeCheckOnKing, cell, checkOnKing } from "../../../utils/check-game";
+import After from "./after";
+import DragEnds from "./drag-end";
+import { cell } from "../../../utils/check-game";
+import { type } from "os";
 
+let startCell: IBoard | null = null;
+let endCell: IBoard | null = null;
 
 const Game = () => {
     const [arr, setArr] = useState<IBoard[]>([]);
@@ -31,9 +34,9 @@ const Game = () => {
                 setRoomValue(newRoomValue);
                 setCnt(cnt);
             })
-            
+
         })
-        
+
         return () => {
             newSocket.disconnect();
         };
@@ -53,21 +56,22 @@ const Game = () => {
     }, [])
 
     ///////
-    if(socket){
+    if (socket) {
         socket.on("receive-newBoard", (arr: string) => {
             const newArr = JSON.parse(arr);
             // console.dir(newArr);
             setArr(newArr);
             setFlag2(true);
+            setFlag3(false);
         })
     }
     ///////
 
-    if(cnt === 2 && flag){
+    if (cnt === 2 && flag) {
         let newFakeArr = [];
         for (let r = 1; r <= 8; r++) {
             for (let c = 1; c <= 8; c++) {
-                newFakeArr.push({ ...arr[cell(9 - r, c)], pos: `${r}-${c}`});
+                newFakeArr.push({ ...arr[cell(9 - r, c)], pos: `${r}-${c}` });
             }
         }
         setArr(newFakeArr);
@@ -80,111 +84,50 @@ const Game = () => {
     function dragEnter(ele: IBoard) {
         setLastEle(ele);
     }
+
     function DragEnd(startEle: IBoard) {
-
-        if(!flag2 && !flag3) return;
-
-        if(startEle.color === 'black' && cnt === 1){
-            return;
-        }
-        else if(startEle.color === 'white' && cnt === 2){
-            return;
-        }
-        
-        if (startEle.color === lastEle.color) {
-            return;
-        }
-
-        // if(checkOnKing(arr, cnt) && startEle.type !== "king") {
-        //     return;
-        // }    
-
-        const isValid = CHECK(startEle, lastEle, arr, cnt);
-        if (!isValid) return;
-        console.log("1st phase passed")
-
-
-        if(cnt === 1){
-            if( startEle.color === "white" && beforeCheckOnKing(startEle, lastEle, arr, cnt, "white")){
-                return;
-            }
-            else{
-                if( startEle.color === "black" && beforeCheckOnKing(startEle, lastEle, arr, cnt, "black")){
-                    return;
-                }
-            }
-        }
-        else{
-            if( startEle.color === "black" && beforeCheckOnKing(startEle, lastEle, arr, cnt, "black")){
-                return;
-            }
-            else{
-                if(startEle.color === "white" && beforeCheckOnKing(startEle, lastEle, arr, cnt, "white")){
-                    return;
-                }
-            }
-        }
-        
-        
-        // console.log(startEle.pos);
-        // console.log(lastEle.pos);
-        // console.log(arr);
-        
-        const newArr = arr.map((ele) => {
-            if (ele.pos === startEle.pos) {
-                let SRC = lastEle.src;
-                let TYPE = lastEle.type;
-                let COLOR = lastEle.color;
-                if (lastEle.src !== ".") {
-                    SRC = ".",
-                    COLOR = ".",
-                    TYPE = "."
-                }
-                // // if(lastSrc[0].src === ele.src) SRC = ele.src
-                return { ...ele, src: SRC, type: TYPE, color: COLOR };
-            }
-            if (ele.pos === lastEle.pos) {
-                return { ...ele, src: startEle.src, type: startEle.type, color: startEle.color };
-            }
-            return { ...ele };
-        })
-
-        let newFakeArr: IBoard[] = [];
-        for (let r = 1; r <= 8; r++) {
-            for (let c = 1; c <= 8; c++) {
-                let clr = newArr[cell(9 - r, c)].color;
-                newFakeArr.push({ ...newArr[cell(9 - r, c)], pos: `${r}-${c}`});
-            }
-        }
-        // setFakeArr(newFakeArr);
-        
-        // console.dir(newArr);
-        if (socket) {
-            socket.emit('piece-moved', newFakeArr, roomValue);
-        }
-        setArr(newArr);
-        setFlag2(false);
-        setFlag3(false);
+        DragEnds(socket, startEle, lastEle, arr, cnt, setArr, flag2, flag3, roomValue, setFlag2, setFlag3);
     }
 
-    return (
-        <div className="flex justify-center items-center">
-            <Image placeholder='empty' priority={false} className=" mt-10 z-0 absolute" width={384} height={384} src={"/board.jpeg"} alt="board" unoptimized={true} />
-            <div className=" z-10 bg-cover bg-no-repeat bg-center flex mt-10 h-96 w-96 flex-wrap ">
-                {
-                    arr.map(ele => {
-                        if (ele.src == ".") {
-                            return <div key={ele.pos} draggable={false} onDragEnter={() => dragEnter(ele)} className=" box-border w-12 h-12">
 
-                            </div>
-                        }
-                        return <div key={ele.pos} onDragEnd={() => DragEnd(ele)} onDragEnter={() => dragEnter(ele)} onDrag={() => drag(ele)} draggable={true} className=" box-border w-12 h-12 flex justify-center items-center">
-                            <Image draggable={false} width="30" height="30" src={ele.src} alt="chess" />
-                        </div>
-                    })
-                }
-            </div>
-        </div>
+
+
+    let storeElement: HTMLDivElement | HTMLElement;
+
+    function TouchStart(ele: IBoard, e: React.TouchEvent) {
+        let childElement = e.target as HTMLDivElement;
+        if (!startCell) {
+            if (ele.type === ".") return;
+            startCell = ele;
+            // console.dir(e);
+            // console.dir(childElement)
+            if(childElement.nodeName === "IMG"){
+                childElement.parentElement.classList.add("bg-red-700/20", "border-2", "border-red-800/80");
+                storeElement = childElement.parentElement;
+                return;
+            }
+            childElement.classList.add("bg-red-700/20", "border-2", "border-red-800/80");
+            storeElement = childElement;
+        }
+        else {
+            if (ele.pos != startCell.pos) {
+                endCell = ele;
+                console.log(startCell.pos, endCell.pos);
+                DragEnds(socket, startCell, endCell, arr, cnt, setArr, flag2, flag3, roomValue, setFlag2, setFlag3);
+                startCell = null;
+                // console.dir(storeElement)
+                storeElement.classList.remove("bg-red-700/20", "border-2", "border-red-800/80")
+            }
+        }
+    }
+
+
+
+
+    return (
+        <>
+            <After arr={arr} drag={drag} dragEnter={dragEnter} DragEnd={DragEnd} TouchStart={TouchStart}></After>
+        </>
     )
 }
 
