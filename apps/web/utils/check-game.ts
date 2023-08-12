@@ -2,7 +2,95 @@
 
 import { IBoard } from "../interface";
 
+export function checkOnKing(ar: IBoard[], cnt: number, pieceMoved: string) {
+    if (pieceMoved == "white") {
+        const king = ar.filter((ele) => {
+            return (ele.color === "white" && ele.type === "king")
+        })
+        let found = false;
+        const kingEle = { ...king[0] };
+        ar.forEach(ele => {
+            if (ele.color === "black") {
+                if (CHECK(ele, kingEle, ar, cnt)) {
+                    found = true;
+                    return false;
+                }
+            }
+        })
+        if (found) return true;
+        return false;
+    }
+    else {
+        const king = ar.filter((ele) => {
+            return (ele.color === "black" && ele.type === "king")
+        })
+        let found = false;
+        const kingEle = { ...king[0] };
+        ar.forEach(ele => {
+            if (ele.color === "white") {
+                if (CHECK(ele, kingEle, ar, cnt)) {
+                    found = true;
+                    return false;
+                }
+            }
+        })
+        if (found) return true;
+        return false;
+    }
+}
+
+function checkKing(sPos: IBoard, ePos: IBoard, ar: IBoard[], cnt: number, pieceMoved: string) {
+    let sr = parseInt(sPos.pos[0]), sc = parseInt(sPos.pos[2])
+    let er = parseInt(ePos.pos[0]), ec = parseInt(ePos.pos[2])
+
+    console.log(sr, sc, "hi");
+    console.log(er, ec, "hi");
+
+    let check1 = false;
+    if (sr === er) {
+        if (Math.abs(sc - ec) === 1) check1 = true;
+    }
+    else if (sc === ec) {
+        if (Math.abs(sr - er) === 1) check1 = true;
+    }
+    else {
+        if (Math.abs(sr - er) === 1 && Math.abs(sc - ec) === 1) check1 = true;
+    }
+
+    return check1;
+
+}
+
+export function beforeCheckOnKing(startPiece: IBoard, endPiece: IBoard, arr: IBoard[], cnt: number, pieceMoved: string) {
+    let newArr = arr.map((ele) => {
+        if (ele.pos === startPiece.pos) {
+            let SRC = endPiece.src;
+            let TYPE = endPiece.type;
+            let COLOR = endPiece.color;
+            if (endPiece.src !== ".") {
+                SRC = ".",
+                    COLOR = ".",
+                    TYPE = "."
+            }
+            // // if(lastSrc[0].src === ele.src) SRC = ele.src
+            return { ...ele, src: SRC, type: TYPE, color: COLOR };
+        }
+        if (ele.pos === endPiece.pos) {
+            return { ...ele, src: startPiece.src, type: startPiece.type, color: startPiece.color };
+        }
+        return { ...ele };
+    })
+    if (checkOnKing(newArr, cnt, pieceMoved)) return true;
+    return false;
+}
+
 export const CHECK = (sP: IBoard, eP: IBoard, ar: IBoard[], cnt: number) => {
+
+
+    return simpleCheck(sP, eP, ar, cnt);
+}
+
+function simpleCheck(sP: IBoard, eP: IBoard, ar: IBoard[], cnt: number) {
 
     let startPiece = { ...sP };
     let endPiece = { ...eP };
@@ -18,7 +106,7 @@ export const CHECK = (sP: IBoard, eP: IBoard, ar: IBoard[], cnt: number) => {
         arr = []
         for (let r = 1; r <= 8; r++) {
             for (let c = 1; c <= 8; c++) {
-                arr.push({ ...ar[cell(9 - r, c)] });
+                arr.push({ ...ar[cell(9 - r, c)], pos: `${r}-${c}` });
             }
         }
         // console.dir(arr);
@@ -27,6 +115,9 @@ export const CHECK = (sP: IBoard, eP: IBoard, ar: IBoard[], cnt: number) => {
         startPiece.pos = `${9 - sr}-${sc}`
         endPiece.pos = `${9 - er}-${ec}`
     }
+    let pieceMoved: string;
+    if (sP.color === "black") pieceMoved = "black";
+    else pieceMoved = "white"
 
     if (startPiece.type === "pawn") {
         let check: boolean = checkPawn(startPiece.pos, endPiece.pos, arr)
@@ -54,22 +145,14 @@ export const CHECK = (sP: IBoard, eP: IBoard, ar: IBoard[], cnt: number) => {
     }
 
     if (startPiece.type === "king") {
-        let check: boolean = checkKing(startPiece.pos, endPiece.pos, arr)
+        let check: boolean = checkKing(startPiece, endPiece, arr, cnt, pieceMoved)
         return check;
     }
 
     return true;
 }
 
-function checkKing(sPos: string, ePos: string, arr: IBoard[]) {
-    let sr = parseInt(sPos[0]), sc = parseInt(sPos[2])
-    let er = parseInt(ePos[0]), ec = parseInt(ePos[2])
 
-    // console.log(sr, sc);
-    // console.log(er, ec);
-    return false;
-
-}
 
 function checkQueen(startPiece: IBoard, endPiece: IBoard, arr: IBoard[]) {
     if (checkRook(startPiece.pos, endPiece.pos, arr)) return true;
