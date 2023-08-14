@@ -1,3 +1,5 @@
+import Navbar from "@overpowered-monorepo/ui/components/Navbar";
+
 export default function GameLayout({
     children,
 }: {
@@ -6,7 +8,8 @@ export default function GameLayout({
     return (
         <html lang="en">
             <body>
-                <div className=" touch-none h-screen bg-slate-800">
+                <div className=" touch-none h-screen bg-slate-800 py-2">
+                    <Navbar url = "game" />
                     {children}
                 </div>
             </body>

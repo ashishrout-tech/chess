@@ -1,18 +1,29 @@
-import { Header } from "@overpowered-monorepo/ui/components/Header"
-import { Avatar, AvatarFallback, AvatarImage } from "@overpowered-monorepo/ui/components/ui/avatar"
+"use client"
+
+import TypewriterComponent from 'typewriter-effect';
+import Room from './Room';
 
 export default function Page() {
   return (
-    <>
-      <Header text="Web" />
-      <div className=" flex justify-center">
-        <div>
-          <Avatar className=" top-0 relative hover:top-96 cursor-pointer transition-all ease-in duration-1000 hover:saturate-200 hover:outline-blue-700/30 hover:outline hover:outline-8 hover:outline-offset-2">
-            <AvatarImage src="https://github.com/shadcn.png" />
-            <AvatarFallback>CN</AvatarFallback>
-          </Avatar>
-        </div>
+    <div>
+      <div className='mt-36'>
+        <h1 className=" text-blue-300 text-center text-3xl sm:text-4xl font-extrabold tracking-tight lg:text-5xl">
+          Welcome to Chess Mania
+        </h1>
       </div>
-    </>
+      <div className=" tracking-wider leading-10 font-light pl-7 text-5xl py-2 mt-28 sm:text-6xl text-center bg-gradient-to-r from-indigo-400 via-violet-600 to-cyan-400 bg-clip-text text-transparent">
+        <TypewriterComponent
+          options={{
+            strings: ['Play.', 'Challenge.', 'Enjoy.'],
+            autoStart: true,
+            loop: true,
+          }}
+        />
+      </div>
+      <p className=' italic text-xs sm:text-sm text-center text-muted-foreground'>Absolutely for free</p>
+      <div className=' mt-24 sm:mt-20 flex justify-center'>
+        <Room />
+      </div>
+    </div>
   );
 }

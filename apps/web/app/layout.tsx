@@ -1,4 +1,6 @@
 import "@overpowered-monorepo/tailwind-class";
+import Layout2 from "./layout2";
+import Navbar from "@overpowered-monorepo/ui/components/Navbar"
 
 export default function RootLayout({
   children,
@@ -7,7 +9,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <Layout2 component = {children} />
+      </body>
     </html>
   );
 }

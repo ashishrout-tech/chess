@@ -1,18 +1,25 @@
 "use client"
 
 import { Socket, io } from "socket.io-client";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { IBoard } from "../../../interface";
 import After from "./after";
-import DragEnds from "./drag-end";
+import DragEnds, { Hooks } from "./drag-end";
 import { cell } from "../../../utils/check-game";
-import { type } from "os";
+import { Timer } from "./Timer";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import { blackTimeState, whiteTimeState } from "../../../recoil/atom";
+import { BlackIntervalId, WhiteIntervalId, changeBlackIntervalId, changeWhiteIntervalId } from "./variables";
+import { ToastContainer, toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 let startCell: IBoard | null = null;
 let endCell: IBoard | null = null;
 
-const Game = () => {
+let parentFlag = true;
+
+const Game: React.FC = () => {
     const [arr, setArr] = useState<IBoard[]>([]);
     // const [fakeArr, setFakeArr] = useState<IBoard[]>([]);
     const [lastEle, setLastEle] = useState<IBoard>();
@@ -22,6 +29,8 @@ const Game = () => {
     const [flag, setFlag] = useState(true);
     const [flag2, setFlag2] = useState(false);
     const [flag3, setFlag3] = useState(true);
+    const setWhiteTime = useSetRecoilState(whiteTimeState);
+    const [hFlag, setHFlag] = useState(false);
 
     useEffect(() => {
         const newSocket = io('ws://localhost:5173');
@@ -53,6 +62,7 @@ const Game = () => {
             }
         }
         fetchBoard();
+        setHFlag(true);
     }, [])
 
     ///////
@@ -65,6 +75,20 @@ const Game = () => {
             setFlag3(false);
         })
     }
+
+    useEffect(() => {
+        if (flag2) {
+            console.log("received-trigger")
+            if (BlackIntervalId) clearInterval(BlackIntervalId);
+            const newWhiteIntervalId = setInterval(() => {
+                setWhiteTime((time) => ((time != 0) ? time - 1 : 0));
+            }, 1000)
+            console.log(newWhiteIntervalId);
+            changeWhiteIntervalId(newWhiteIntervalId);
+            console.log(WhiteIntervalId);
+        }
+    }, [flag2])
+
     ///////
 
     if (cnt === 2 && flag) {
@@ -86,9 +110,9 @@ const Game = () => {
     }
 
     function DragEnd(startEle: IBoard) {
+        if (!parentFlag) return;
         DragEnds(socket, startEle, lastEle, arr, cnt, setArr, flag2, flag3, roomValue, setFlag2, setFlag3);
     }
-
 
 
 
@@ -101,7 +125,7 @@ const Game = () => {
             startCell = ele;
             // console.dir(e);
             // console.dir(childElement)
-            if(childElement.nodeName === "IMG"){
+            if (childElement.nodeName === "IMG") {
                 childElement.parentElement.classList.add("bg-red-700/20", "border-2", "border-red-800/80");
                 storeElement = childElement.parentElement;
                 return;
@@ -121,12 +145,60 @@ const Game = () => {
         }
     }
 
-
-
+    if(!hFlag){
+        return null;
+    }
 
     return (
         <>
-            <After arr={arr} drag={drag} dragEnter={dragEnter} DragEnd={DragEnd} TouchStart={TouchStart}></After>
+            <ToastContainer position="top-center" />
+            <UpTimer />
+            <Hooks />
+            <After arr={arr} drag={drag} dragEnter={dragEnter} DragEnd={DragEnd} TouchStart={TouchStart} ></After>
+            <DownTimer />
+        </>
+    )
+}
+let cc = true;
+
+const UpTimer = () => {
+    // console.log("up-timer component");
+    let time = useRecoilValue(blackTimeState);
+    if (time <= 0) {
+        parentFlag = false;
+        if (cc) {
+            toast("Game over");
+            cc = false;
+        }
+    }
+    return (
+        <>
+            <div className="  flex justify-center w-full pt-20  pb-2">
+                <div className=" flex justify-start w-96 ">
+                    <Timer time={time} />
+                </div>
+            </div>
+        </>
+    )
+}
+
+const DownTimer = () => {
+    // console.log("down-timer component");
+    const time = useRecoilValue(whiteTimeState);
+    if (time <= 0) {
+        parentFlag = false;
+        if (cc) {
+            toast("Game Over");
+            cc = false;
+        }
+    }
+    return (
+        <>
+            <div className="  flex justify-center w-full pt-2">
+                <div className=" flex justify-end w-96 ">
+                    <Timer time={time} />
+                </div>
+            </div>
         </>
     )
 }

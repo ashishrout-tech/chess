@@ -4,9 +4,23 @@ import { Socket } from "socket.io-client";
 import { IBoard } from "../../../interface";
 import { CHECK, beforeCheckOnKing, cell } from "../../../utils/check-game";
 import { Dispatch, SetStateAction } from "react";
+import { SetterOrUpdater, useSetRecoilState } from "recoil";
+import { blackTimeState, whiteTimeState } from "../../../recoil/atom";
+import { BlackIntervalId, WhiteIntervalId, changeBlackIntervalId, changeWhiteIntervalId } from "./variables";
 
+
+let setBlackTime: SetterOrUpdater<number>, setWhiteTime: SetterOrUpdater<number>;
+
+export const Hooks = () => {
+    setBlackTime = useSetRecoilState(blackTimeState);
+    setWhiteTime = useSetRecoilState(whiteTimeState);
+    return (
+        <></>
+    );
+}
 
 function DragEnd(socket: Socket, startEle: IBoard, lastEle: IBoard, arr: IBoard[], cnt: number,  setArr: Dispatch<SetStateAction<IBoard[]>>, flag2: boolean, flag3: boolean, roomValue: string, setFlag2: Dispatch<SetStateAction<boolean>>, setFlag3: Dispatch<SetStateAction<boolean>>) {
+
 
     if(flag3 && startEle.color === "black") return;
 
@@ -92,6 +106,48 @@ function DragEnd(socket: Socket, startEle: IBoard, lastEle: IBoard, arr: IBoard[
     setArr(newArr);
     setFlag2(false);
     setFlag3(false);
+
+
+    
+    if(cnt === 1){
+        if(startEle.color === "white"){
+            console.log("white");
+            if(WhiteIntervalId) clearInterval(WhiteIntervalId);
+            const newBlackIntervalId = setInterval(() => {
+                setBlackTime((time) => ((time != 0) ? time - 1 : 0));
+            }, 1000)
+            changeBlackIntervalId(newBlackIntervalId);
+        }
+        else if(startEle.color === "black"){
+            console.log("black");
+            if(BlackIntervalId) clearInterval(BlackIntervalId);
+            const newWhiteIntervalId = setInterval(() => {
+                setWhiteTime((time) => ((time != 0) ? time - 1 : 0));
+            }, 1000)
+            changeWhiteIntervalId(newWhiteIntervalId);
+        }
+    }
+
+
+    else if(cnt === 2){
+        if(startEle.color === "white"){
+            console.log("white");
+            if(BlackIntervalId) clearInterval(BlackIntervalId);
+            const newWhiteIntervalId = setInterval(() => {
+                setWhiteTime((time) => ((time != 0) ? time - 1 : 0));
+            }, 1000)
+            changeWhiteIntervalId(newWhiteIntervalId);
+        }
+        else if(startEle.color === "black"){
+            console.log("black");
+            console.log(WhiteIntervalId);
+            if(WhiteIntervalId) clearInterval(WhiteIntervalId);
+            const newBlackIntervalId = setInterval(() => {
+                setBlackTime((time) => ((time != 0) ? time - 1 : 0));
+            }, 1000)
+            changeBlackIntervalId(newBlackIntervalId);
+        }
+    }
 }
 
 export default DragEnd;

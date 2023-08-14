@@ -1,7 +1,7 @@
 import board from "../db/boardmodel";
 
 
-const black = ["/../../../black/b-rook.png", "/../../../black/b-horse.png", "/../../../black/b-bishop.png", "/../../../black/b-king.png", "/../../../black/b-queen.png", "/../../../black/b-bishop.png", "/../../../black/b-horse.png", "/../../../black/b-rook.png"];
+const black = ["/../../../black/b-rook.png", "/../../../black/b-horse.png", "/../../../black/b-bishop.png", "/../../../black/b-queen.png", "/../../../black/b-king.png",  "/../../../black/b-bishop.png", "/../../../black/b-horse.png", "/../../../black/b-rook.png"];
 
 for (let i = 1; i <= 8; i++) {
     black.push("/../../../black/b-pawn.png");
@@ -12,7 +12,7 @@ const white = [];
 for (let i = 1; i <= 8; i++) {
     white.push("/../../../white/w-pawn.png");
 }
-white.push("/../../../white/w-rook.png", "/../../../white/w-horse.png", "/../../../white/w-bishop.png", "/../../../white/w-king.png", "/../../../white/w-queen.png", "/../../../white/w-bishop.png", "/../../../white/w-horse.png", "/../../../white/w-rook.png");
+white.push("/../../../white/w-rook.png", "/../../../white/w-horse.png", "/../../../white/w-bishop.png",  "/../../../white/w-queen.png", "/../../../white/w-king.png", "/../../../white/w-bishop.png", "/../../../white/w-horse.png", "/../../../white/w-rook.png");
 
 const arr = [];
 black.forEach((ele) => {
