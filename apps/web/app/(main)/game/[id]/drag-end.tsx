@@ -1,11 +1,11 @@
 "use client"
 
 import { Socket } from "socket.io-client";
-import { IBoard } from "../../../interface";
-import { CHECK, beforeCheckOnKing, cell } from "../../../utils/check-game";
+import { IBoard } from "../../../../interface";
+import { CHECK, beforeCheckOnKing, cell } from "../../../../utils/check-game";
 import { Dispatch, SetStateAction } from "react";
 import { SetterOrUpdater, useSetRecoilState } from "recoil";
-import { blackTimeState, whiteTimeState } from "../../../recoil/atom";
+import { blackTimeState, whiteTimeState } from "../../../../recoil/atom";
 import { BlackIntervalId, WhiteIntervalId, changeBlackIntervalId, changeWhiteIntervalId } from "./variables";
 
 

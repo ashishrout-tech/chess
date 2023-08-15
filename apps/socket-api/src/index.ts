@@ -41,12 +41,16 @@ io.on('connection', (socket: Socket) => {
         if(room == storedRoom){
             cb("Another one joined", cnt);
             cnt++;
+            socket.to(room).emit("receive-playerJoined", 2);
+            console.log("second-player");
         }
         else{
             cnt = 1;
             cb("first person joined", cnt);
             storedRoom = room;
             cnt++;
+            socket.to(room).emit("receive-playerJoined", 1);
+            console.log("first-player");
         }
         console.log(`joined-room ${room}`, socket.id);
     })

@@ -3,21 +3,28 @@
 import { Socket, io } from "socket.io-client";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { IBoard } from "../../../interface";
+import { IBoard } from "../../../../interface";
 import After from "./after";
 import DragEnds, { Hooks } from "./drag-end";
-import { cell } from "../../../utils/check-game";
+import { cell } from "../../../../utils/check-game";
 import { Timer } from "./Timer";
 import { useRecoilValue, useSetRecoilState } from "recoil";
-import { blackTimeState, whiteTimeState } from "../../../recoil/atom";
+import { blackTimeState, whiteTimeState } from "../../../../recoil/atom";
 import { BlackIntervalId, WhiteIntervalId, changeBlackIntervalId, changeWhiteIntervalId } from "./variables";
 import { ToastContainer, toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
+import { useParams } from "next/navigation";
+import { Skeleton } from "@overpowered-monorepo/ui/components/ui/skeleton"
+
 
 let startCell: IBoard | null = null;
 let endCell: IBoard | null = null;
 
 let parentFlag = true;
+let sFlag = true;
+let flag = true;
+
+let sCount = 0;
 
 const Game: React.FC = () => {
     const [arr, setArr] = useState<IBoard[]>([]);
@@ -26,20 +33,33 @@ const Game: React.FC = () => {
     const [socket, SetSocket] = useState<Socket | null>(null);
     const [roomValue, setRoomValue] = useState<string | null>(null);
     const [cnt, setCnt] = useState<number>(1);
-    const [flag, setFlag] = useState(true);
     const [flag2, setFlag2] = useState(false);
     const [flag3, setFlag3] = useState(true);
     const setWhiteTime = useSetRecoilState(whiteTimeState);
     const [hFlag, setHFlag] = useState(false);
+    const params = useParams()
 
     useEffect(() => {
         const newSocket = io('ws://localhost:5173');
         SetSocket(newSocket);
         newSocket.on("connect", () => {
-            const newRoomValue = prompt("Enter the room you want to join");
+            const newRoomValue = params.id as string;
+
 
             newSocket.emit("join-room", newRoomValue, (message: string, cnt: number) => {
-                console.log(message, cnt);
+                if (cnt === 1) {
+                    toast("You joined as white.")
+                    setTimeout(() => {
+                        toast("Wait for black to join.")
+                    }, 3000)
+                }
+                else {
+                    toast("You joined as black");
+                    setTimeout(() => {
+                        toast("Wait for the first move.")
+                    }, 3000)
+
+                }
                 setRoomValue(newRoomValue);
                 setCnt(cnt);
             })
@@ -55,10 +75,12 @@ const Game: React.FC = () => {
         async function fetchBoard() {
             try {
                 const response = await axios.get(`${process.env.NEXT_PUBLIC_URL}/api/board`);
-                setArr(response.data.message);
+                if(sCount === 1)setArr(response.data.message);
+                ++sCount;
                 // setFakeArr(response.data.message);
             } catch (error) {
                 console.log(error);
+                toast.error("Some error occurred");
             }
         }
         fetchBoard();
@@ -67,12 +89,25 @@ const Game: React.FC = () => {
 
     ///////
     if (socket) {
+
         socket.on("receive-newBoard", (arr: string) => {
             const newArr = JSON.parse(arr);
-            // console.dir(newArr);
             setArr(newArr);
             setFlag2(true);
             setFlag3(false);
+        })
+        socket.on("receive-playerJoined", (cnt: number) => {
+            // console.log(cnt, "count")
+            if (cnt === 2) {
+                if (sFlag) {
+                    toast("2nd Player Joined");
+                    setTimeout(() => {
+                        toast("make the first move");
+                    }, 3000)
+                    sFlag = false;
+                }
+            }
+
         })
     }
 
@@ -91,16 +126,21 @@ const Game: React.FC = () => {
 
     ///////
 
-    if (cnt === 2 && flag) {
+    if (sCount === 2 && cnt === 2 && flag) {
+        console.log("2-start");
+        console.dir(arr);
         let newFakeArr = [];
         for (let r = 1; r <= 8; r++) {
             for (let c = 1; c <= 8; c++) {
                 newFakeArr.push({ ...arr[cell(9 - r, c)], pos: `${r}-${c}` });
             }
         }
+        flag = false;
+        console.dir(newFakeArr)
+        console.dir(arr)
         setArr(newFakeArr);
-        setFlag(false);
     }
+
 
     function drag(ele: IBoard) {
         console.log("dragging", ele.pos);
@@ -119,6 +159,7 @@ const Game: React.FC = () => {
     let storeElement: HTMLDivElement | HTMLElement;
 
     function TouchStart(ele: IBoard, e: React.TouchEvent) {
+        if (!parentFlag) return;
         let childElement = e.target as HTMLDivElement;
         if (!startCell) {
             if (ele.type === ".") return;
@@ -145,13 +186,15 @@ const Game: React.FC = () => {
         }
     }
 
-    if(!hFlag){
-        return null;
+    if (!hFlag) {
+        return <div className=" pt-2 mt-28 select-none flex justify-center items-center">
+            <Skeleton className=" bg-white/60 h-[32rem]  sm:h-96  w-96" />
+        </div>
     }
 
     return (
         <>
-            <ToastContainer position="top-center" />
+            <ToastContainer hideProgressBar={true} theme="dark" position="top-center" limit={1} autoClose={1000} />
             <UpTimer />
             <Hooks />
             <After arr={arr} drag={drag} dragEnter={dragEnter} DragEnd={DragEnd} TouchStart={TouchStart} ></After>

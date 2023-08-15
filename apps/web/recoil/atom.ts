@@ -4,9 +4,9 @@ import { atom } from "recoil";
 
 export const blackTimeState = atom({
     key: "blackTimeState",
-    default: 60,
+    default: 300,
 })
 export const whiteTimeState = atom({
     key: "whiteTimeState",
-    default: 60,
+    default: 300,
 })

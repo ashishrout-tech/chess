@@ -14,7 +14,7 @@ const Topbar = (props: IProps) => {
     return (
         <div className=" flex justify-between w-full ">
             <Link className=" w-fit gap-x-2 items-center flex px-2 select-none cursor-pointer" rel="stylesheet" href={"/"} >
-                <img className=" p-1 rounded-md bg-white h-10 w-13" src="logo.png" />
+                <img className=" p-1 rounded-md bg-white h-10 w-13" src={url === "game" ? "../logo.png": "logo.png"} alt="logo" />
                 <p className=" text-xl font-bold bg-gradient-to-r from-blue-200 to-cyan-200 bg-clip-text text-transparent">CHESS-MANIA</p>
             </Link>
             <div className=" hidden sm:flex items-center mx-8">
